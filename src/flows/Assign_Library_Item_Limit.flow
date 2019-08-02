@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <decisions>
+        <description>Tests if a Library Item Limit is found for the Category</description>
+        <name>Limit_Found</name>
+        <label>Limit Found?</label>
+        <locationX>281</locationX>
+        <locationY>52</locationY>
+        <defaultConnectorLabel>No - Default Used</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Library_Item_Limit</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Library_Item_Limit</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Assigns the corresponding Library Item Limit. If a limit has not been configured, the default limit will be used</description>
+    <interviewLabel>Assign Library Item Limit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Assign Library Item Limit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Retrieves the Library Item Limit for the Library Item Category</description>
+        <name>Get_Library_Item_Limit</name>
+        <label>Get Library Item Limit</label>
+        <locationX>156</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Limit_Found</targetReference>
+        </connector>
+        <filters>
+            <field>Category__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item.Category__c</elementReference>
+            </value>
+        </filters>
+        <object>Library_Item_Limit__c</object>
+        <outputReference>Library_Item_Limit</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <description>Commits the assigned Library Item Limit</description>
+        <name>Set_Library_Item_Limit</name>
+        <label>Set  Library Item Limit</label>
+        <locationX>290</locationX>
+        <locationY>262</locationY>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Library_Item_Limit__c</field>
+            <value>
+                <elementReference>Library_Item_Limit.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Library_Item__c</object>
+    </recordUpdates>
+    <startElementReference>Get_Library_Item_Limit</startElementReference>
+    <status>Active</status>
+    <variables>
+        <description>Library Item input</description>
+        <name>Library_Item</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item__c</objectType>
+    </variables>
+    <variables>
+        <description>Library Item Limit for the Category</description>
+        <name>Library_Item_Limit</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item_Limit__c</objectType>
+    </variables>
+</Flow>

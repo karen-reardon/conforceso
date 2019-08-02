@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Library Item Limit</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Library Item Limits</value>
+    </caseValues>
+    <fields>
+        <label><!-- Borrowing Limit --></label>
+        <name>Borrowing_Limit__c</name>
+    </fields>
+    <fields>
+        <label><!-- Borrowing Period Interval --></label>
+        <name>Borrowing_Period_Interval__c</name>
+    </fields>
+    <fields>
+        <label><!-- Borrowing Period --></label>
+        <name>Borrowing_Period__c</name>
+        <picklistValues>
+            <masterLabel>Days</masterLabel>
+            <translation><!-- Days --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Hours</masterLabel>
+            <translation><!-- Hours --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Category --></label>
+        <name>Category__c</name>
+    </fields>
+    <fields>
+        <label><!-- Search Tags Formula --></label>
+        <name>Search_Tags_Formula__c</name>
+    </fields>
+    <fields>
+        <label><!-- Search Tags --></label>
+        <name>Search_Tags__c</name>
+    </fields>
+    <layouts>
+        <layout>Library Item Limit Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <label><!-- Library Item Limit --></label>
+        <name>Library_Item_Limit</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Borrowing limit value must be greater than zero --></errorMessage>
+        <name>Positive</name>
+    </validationRules>
+</CustomObjectTranslation>

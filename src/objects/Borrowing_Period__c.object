@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>Borrowing period configuration for library items</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AV_Equipment_Interval__c</fullName>
+        <defaultValue>5</defaultValue>
+        <description>The period of time a user can check out  AV Equipment</description>
+        <externalId>false</externalId>
+        <label>AV Equipment Interval</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Book_Interval__c</fullName>
+        <description>Length of time a person can check out a book</description>
+        <externalId>false</externalId>
+        <label>Book Interval</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Borrowing Period</label>
+    <visibility>Public</visibility>
+</CustomObject>

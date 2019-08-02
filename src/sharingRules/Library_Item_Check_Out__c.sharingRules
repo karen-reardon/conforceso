@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Librarian</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Librarians share all. Sharing rule used over Modify All permission because Delete is still not allowed.</description>
+        <label>Librarian</label>
+        <sharedTo>
+            <group>Librarian_Group</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>Librarian_Group</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

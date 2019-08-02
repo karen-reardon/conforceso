@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Library Item Check Out</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Library Item Check Out</value>
+    </caseValues>
+    <fields>
+        <label><!-- Borrower --></label>
+        <name>Borrower__c</name>
+        <relationshipLabel><!-- Library Item Check Out --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Check In Time --></label>
+        <name>Check_In_Time__c</name>
+    </fields>
+    <fields>
+        <label><!-- Check Out Status --></label>
+        <name>Check_Out_Status__c</name>
+    </fields>
+    <fields>
+        <label><!-- Check Out Time --></label>
+        <name>Check_Out_Time__c</name>
+    </fields>
+    <fields>
+        <label><!-- Due Back Time --></label>
+        <name>Due_Back_Time__c</name>
+    </fields>
+    <fields>
+        <label><!-- Is Checked In? --></label>
+        <name>Is_Checked_In__c</name>
+    </fields>
+    <fields>
+        <label><!-- Is Checked Out? --></label>
+        <name>Is_Checked_Out__c</name>
+    </fields>
+    <fields>
+        <label><!-- Is Overdue? --></label>
+        <name>Is_Overdue__c</name>
+    </fields>
+    <fields>
+        <label><!-- Library Item --></label>
+        <name>Library_Item__c</name>
+        <relationshipLabel><!-- Library Item Check Out --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Overdue Trigger --></label>
+        <name>Overdue_Trigger__c</name>
+    </fields>
+    <fields>
+        <label><!-- Returned Late? --></label>
+        <name>Returned_Late__c</name>
+    </fields>
+    <fields>
+        <label><!-- Search Tags Formula --></label>
+        <name>Search_Tags_Formula__c</name>
+    </fields>
+    <fields>
+        <label><!-- Search Tags --></label>
+        <name>Search_Tags__c</name>
+    </fields>
+    <fields>
+        <label><!-- Title --></label>
+        <name>Title__c</name>
+    </fields>
+    <layouts>
+        <layout>Library Item Check Out Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <label><!-- Library Item Check Out --></label>
+        <name>Library_Item_Check_Out</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- A borrower must be selected --></errorMessage>
+        <name>Borrower_Required</name>
+    </validationRules>
+</CustomObjectTranslation>

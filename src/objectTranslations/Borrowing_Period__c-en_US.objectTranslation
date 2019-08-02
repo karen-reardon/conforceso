@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Borrowing Period</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Book Borrowing Interval</value>
+    </caseValues>
+    <fields>
+        <label><!-- AV Equipment Interval --></label>
+        <name>AV_Equipment_Interval__c</name>
+    </fields>
+    <fields>
+        <label><!-- Book Interval --></label>
+        <name>Book_Interval__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

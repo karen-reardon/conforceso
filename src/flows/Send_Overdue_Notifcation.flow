@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Send email notifcatoin</description>
+        <name>Email_Notification</name>
+        <label>Email Notification</label>
+        <locationX>387</locationX>
+        <locationY>157</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Post_to_Chatter</targetReference>
+        </connector>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Overdue_Notification</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Notification_Subject</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Posts to Borrowers private chatter group</description>
+        <name>Post_to_Chatter</name>
+        <label>Post to Chatter</label>
+        <locationX>555</locationX>
+        <locationY>157</locationY>
+        <actionName>chatterPost</actionName>
+        <actionType>chatterPost</actionType>
+        <connector>
+            <targetReference>Send_to_User_Chatter_Directly</targetReference>
+        </connector>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <elementReference>Overdue_Notification</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>subjectNameOrId</name>
+            <value>
+                <elementReference>User.Username</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>Group</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_to_User_Chatter_Directly</name>
+        <label>Send to User Chatter Directly</label>
+        <locationX>736</locationX>
+        <locationY>158</locationY>
+        <actionName>chatterPost</actionName>
+        <actionType>chatterPost</actionType>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <stringValue>test chatter one user to another</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>subjectNameOrId</name>
+            <value>
+                <elementReference>User.Username</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>User</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <description>Send email and post to chatter</description>
+    <interviewLabel>Send Overdue Notifcation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send Overdue Notifcation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get User for Borrower</description>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>244</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Email_Notification</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item_Check_Out.Borrower__c</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputReference>User</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Username</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <startElementReference>Get_User</startElementReference>
+    <status>Active</status>
+    <textTemplates>
+        <description>Subject for notification email</description>
+        <name>Notification_Subject</name>
+        <text>Your Library Item &quot; {!Library_Item_Check_Out.Title__c}&quot; is overdue</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Overdue_Notification</name>
+        <text>Dear {!User.Name},
+
+Your Library item is now overdue. Please return at your earliest convenience.
+
+Title: {!Library_Item_Check_Out.Title__c}
+Due Back Time: {!Library_Item_Check_Out.Due_Back_Time__c}
+Check Out Time: {!Library_Item_Check_Out.Check_Out_Time__c}
+
+Thank you</text>
+    </textTemplates>
+    <variables>
+        <description>Library Item Check Out for the notification</description>
+        <name>Library_Item_Check_Out</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item_Check_Out__c</objectType>
+    </variables>
+    <variables>
+        <name>Notification_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Borrower User record</description>
+        <name>User</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+</Flow>

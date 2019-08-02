@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <decisions>
+        <description>Check if Borrower is an employee.</description>
+        <name>Is_Employee_Profile</name>
+        <label>Is Employee Profile?</label>
+        <locationX>295</locationX>
+        <locationY>201</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Employee</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Library_Item_Check_Out_Share</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Grants the Borrower read access to the check out record</description>
+    <interviewLabel>Grant Borrower Access {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Grant Borrower Access</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>Shares the Library Item Check Out with the Borrower</description>
+        <name>Create_Library_Item_Check_Out_Share</name>
+        <label>Library Item Check Out Share</label>
+        <locationX>304</locationX>
+        <locationY>397</locationY>
+        <inputAssignments>
+            <field>AccessLevel</field>
+            <value>
+                <stringValue>Read</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>Library_Item_Check_Out.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RowCause</field>
+            <value>
+                <stringValue>Manual</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UserOrGroupId</field>
+            <value>
+                <elementReference>Library_Item_Check_Out.Borrower__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Library_Item_Check_Out__Share</object>
+    </recordCreates>
+    <recordLookups>
+        <description>Get the Borrowers Profile - only need to share with Employees</description>
+        <name>Get_Profile</name>
+        <label>Get Profile</label>
+        <locationX>303</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Employee_Profile</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>User.ProfileId</elementReference>
+            </value>
+        </filters>
+        <object>Profile</object>
+        <outputReference>Profile</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Get the User Profile - only need to share with Employees</description>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>176</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Profile</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item_Check_Out.Borrower__c</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputReference>User</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>ProfileId</queriedFields>
+    </recordLookups>
+    <startElementReference>Get_User</startElementReference>
+    <status>Active</status>
+    <variables>
+        <description>Library Item Check Out input</description>
+        <name>Library_Item_Check_Out</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item_Check_Out__c</objectType>
+    </variables>
+    <variables>
+        <description>Profile of Borrower</description>
+        <name>Profile</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Profile</objectType>
+    </variables>
+    <variables>
+        <description>Borrower User</description>
+        <name>User</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+</Flow>

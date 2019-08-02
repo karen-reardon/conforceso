@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Assigns the Due Back Time and the corresponding Overdue Trigger</description>
+        <name>Use_Category_Due_Back_Time</name>
+        <label>Use Category Due Back Time</label>
+        <locationX>186</locationX>
+        <locationY>309</locationY>
+        <assignmentItems>
+            <assignToReference>Due_Back_Time</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fnCalculate_Category_Due_Back_Time</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Overdue_Due_Back_Time</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assigns the default due back time based on record type</description>
+        <name>UseDefault</name>
+        <label>Use Default</label>
+        <locationX>436</locationX>
+        <locationY>315</locationY>
+        <assignmentItems>
+            <assignToReference>Due_Back_Time</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fnCalculate_Default_Due_Back_Time</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Overdue_Due_Back_Time</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Tests if a Library Item Limit is configured</description>
+        <name>Limit_Exists</name>
+        <label>Limit Exists?</label>
+        <locationX>309</locationX>
+        <locationY>196</locationY>
+        <defaultConnector>
+            <targetReference>UseDefault</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Library_Item</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Use_Category_Due_Back_Time</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Assigns the Due Back Time and Overdue Trigger using the Check In Time, Library Item Limit (category) or the Library Settings Borrowing Period (if no limit configured)</description>
+    <formulas>
+        <description>Calculates the Due Back Time using the Checked Out Time, Library Item Limit (category)</description>
+        <name>fnCalculate_Category_Due_Back_Time</name>
+        <dataType>DateTime</dataType>
+        <expression>{!Library_Item_Check_Out.Check_Out_Time__c} + {!Library_Item_Limit.Borrowing_Limit__c}</expression>
+    </formulas>
+    <formulas>
+        <description>Calculates the default Due Back Time based on record type</description>
+        <name>fnCalculate_Default_Due_Back_Time</name>
+        <dataType>DateTime</dataType>
+        <expression>CASE ({!Library_Item.Record_Type_Name__c},
+  &quot;Book&quot;, {!Library_Item_Check_Out.Check_Out_Time__c} + {!$Setup.Borrowing_Period__c.Book_Interval__c},
+  &quot;AV_Equipment&quot;, {!Library_Item_Check_Out.Check_Out_Time__c} + {!$Setup.Borrowing_Period__c.AV_Equipment_Interval__c},
+  {!Library_Item_Check_Out.Check_Out_Time__c} + 1)</expression>
+    </formulas>
+    <interviewLabel>Assign Due Back Time {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Assign Due Back Time</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Gets the Library Item - used to get the configured Library Item Limit</description>
+        <name>Get_Library_Item</name>
+        <label>Get Library Item</label>
+        <locationX>187</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Library_Item_Limit</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item_Check_Out.Library_Item__c</elementReference>
+            </value>
+        </filters>
+        <object>Library_Item__c</object>
+        <outputReference>Library_Item</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Library_Item_Limit__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets the Library Item Limit configured for the Library Item</description>
+        <name>Get_Library_Item_Limit</name>
+        <label>Get Library Item Limit</label>
+        <locationX>318</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Limit_Exists</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item.Library_Item_Limit__c</elementReference>
+            </value>
+        </filters>
+        <object>Library_Item_Limit__c</object>
+        <outputReference>Library_Item_Limit</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Borrowing_Limit__c</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <description>Updates the Due Back Time and Overdue Trigger</description>
+        <name>Overdue_Due_Back_Time</name>
+        <label>Overdue/Due Back Time</label>
+        <locationX>319</locationX>
+        <locationY>508</locationY>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Library_Item_Check_Out.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Due_Back_Time__c</field>
+            <value>
+                <elementReference>Due_Back_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Overdue_Trigger__c</field>
+            <value>
+                <elementReference>Due_Back_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Library_Item_Check_Out__c</object>
+    </recordUpdates>
+    <startElementReference>Get_Library_Item</startElementReference>
+    <status>Active</status>
+    <variables>
+        <description>Local variable for the calculated Due Back Time</description>
+        <name>Due_Back_Time</name>
+        <dataType>DateTime</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Library Item to get the configured Library Item Limit</description>
+        <name>Library_Item</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item__c</objectType>
+    </variables>
+    <variables>
+        <description>Library Item Check Out record input</description>
+        <name>Library_Item_Check_Out</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item_Check_Out__c</objectType>
+    </variables>
+    <variables>
+        <description>Library Item Limit for the Check Out</description>
+        <name>Library_Item_Limit</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Library_Item_Limit__c</objectType>
+    </variables>
+</Flow>

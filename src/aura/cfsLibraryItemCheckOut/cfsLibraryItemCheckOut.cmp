@@ -1,0 +1,60 @@
+<aura:component controller="cfsLibraryItemController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="errorMessage" type="List" />
+    <aura:attribute name="borrowerId" type="String" />
+    <aura:attribute name="scanState" type="Boolean" />
+    <aura:attribute name="activeTab" type="String" />
+    <aura:attribute name="counter" type="Integer" />
+    
+    <ltng:require scripts="{!$Resource.cfsJS}" afterScriptsLoaded="{!c.doLoad}" />
+    
+    <div class="slds-theme_default slds-box slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-1 slds-text-heading_medium" >
+            <lightning:tabset>
+                <lightning:tab label="CHECK OUT" id="CheckOut" onactive="{!c.handleTabSelect}">
+                </lightning:tab>                    
+                <lightning:tab label="CHECK IN" id="CheckIn" onactive="{!c.handleTabSelect}">
+                </lightning:tab>
+            </lightning:tabset>
+        </div>
+        <div class="slds-col slds-size_1-of-3 slds-grid">
+            <div class="slds-p-bottom_small slds-p-horizontal_small">
+                <lightning:buttonStateful state="{!v.scanState}"  aura:id="scan" variant="brand" labelWhenOff="Start Scan" labelWhenOn="Scanning" onclick="{!c.handleStartScan}" />
+                <span class="slds-m-horizontal_medium">
+				<lightning:badge label="{!v.counter}"/>
+                </span>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="slds-p-bottom_small slds-p-horizontal_small">
+                <lightning:button name="refresh" aura:id="refresh" variant="brand" label="Refresh" onclick="{!c.handleRefresh}" />
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+            <aura:if isTrue="{!not(empty(v.errorMessage))}">
+                <div class="slds-p-bottom_small slds-p-horizontal_small">
+                    <div class="slds-theme_error slds-p-around_small">
+                        <aura:iteration items="{!v.errorMessage}" var="item">
+                            <div>{!item}</div>
+                        </aura:iteration>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="slds-p-horizontal_small">
+                <lightning:recordEditForm aura:id="LibraryItemCheckOut" objectApiName="Library_Item_Check_Out__c">
+                    <lightning:inputField aura:id="borrower" fieldName="Borrower__c" onchange="{!c.handleBorrowerChange}"/>			        
+                </lightning:recordEditForm>
+            </div>
+            <div class="slds-p-horizontal_small" onkeyup="{!c.handleKeyUp }">
+                <lightning:input aura:id="barcode" name="barcode" label="" type="text" onblur="{!c.handleBlur}" />
+            </div>
+        </div>
+        <div class="slds-col slds-size_2-of-3">
+            <div class="slds-p-around_small">
+                <c:cfsCurrentLibraryItemCheckOutList aura:id="currentLibraryItemCheckOutList" borrowerId="{!v.borrowerId}"/>
+            </div>
+        </div>
+    </div>
+</aura:component>
